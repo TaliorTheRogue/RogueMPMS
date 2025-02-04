@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { useFonts } from 'expo-font';
 import { useStore } from './store/store';
+import  MapIcon  from './components/MapIcons';
 
 export default function App() {
 
@@ -16,7 +17,7 @@ export default function App() {
     'SuperMario256': require('../assets/fonts/SuperMario256.ttf')
   });
 
-  const { selectedMap, random } = useStore();
+  const { mapData, random } = useStore();
 
   return (
     <View style={styles.container}>
@@ -28,7 +29,17 @@ export default function App() {
         <Text style={styles.title}>MAP SELECTOR</Text>
       </View>
       <View>
-        <Text>{selectedMap}</Text>
+        {mapData !== null ?
+          <MapIcon 
+            icon={mapData.boardIcon} 
+            name={mapData.name} 
+          />
+          :
+          <Image 
+            source={require('../assets/splash-icon.png')}
+            style={styles.logo}
+          />
+        }
       </View>
       <View>
         <TouchableOpacity
@@ -58,7 +69,7 @@ const styles = StyleSheet.create({
   titleContainer : {
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 50,
+    marginBottom: 10,
   },
   logo: {
     resizeMode: 'stretch',
