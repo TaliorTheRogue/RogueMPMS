@@ -1,12 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { useState, useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { useStore } from './store/store';
 import  MapIcon  from './components/MapIcons';
 
 export default function App() {
 
-  useFonts({
+  const { mapData, random } = useStore();
+
+  const [fontsLoaded] = useFonts({
     'ShinGoProRegular': require('../assets/fonts/AOTFShinGoProRegular.otf'),
     'ShinGoProBold': require('../assets/fonts/AOTFShinGoProBold.otf'),
     'ShinGoProDeBold': require('../assets/fonts/AOTFShinGoProDeBold.otf'),
@@ -16,8 +19,15 @@ export default function App() {
     'ShinGoProMedium': require('../assets/fonts/AOTFShinGoProMedium.otf'),
     'SuperMario256': require('../assets/fonts/SuperMario256.ttf')
   });
+  const [isReady, setIsReady] = useState(false);
 
-  const { mapData, random } = useStore();
+  useEffect(() => {
+    if (fontsLoaded) {
+      setIsReady(true);
+    }
+  }, [fontsLoaded]);
+
+  if (!isReady) return null;
 
   return (
     <View style={styles.container}>
@@ -36,8 +46,8 @@ export default function App() {
           />
           :
           <Image 
-            source={require('../assets/splash-icon.png')}
-            style={styles.logo}
+            source={require('../assets/QuestionBlock.png')}
+            style={styles.questionLogo}
           />
         }
       </View>
@@ -50,7 +60,7 @@ export default function App() {
         </TouchableOpacity>
       </View>
       <View style={styles.footer}>
-        <Text style={styles.footerText}>Developped & Powered by RogueCorp.</Text>
+        <Text style={styles.footerText}>Developed & Powered by RogueCorp.</Text>
       </View>
       <StatusBar style="auto" />
     </View>
@@ -74,7 +84,7 @@ const styles = StyleSheet.create({
   logo: {
     resizeMode: 'stretch',
     width: 200,
-    height: 150,
+    height: 170,
     marginTop: 10,
     marginBottom: 10,
   },
@@ -82,6 +92,12 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'SuperMario256',
     color: '#fff',
+  },
+  questionLogo: {
+    resizeMode: 'contain',
+    width: 240,
+    height: 240,
+    marginBottom: 10,
   },
   button: {
     borderRadius: 50,
@@ -92,6 +108,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 300,
     height: 50,
+    elevation: 5,
   },
   buttonText: {
     fontFamily: 'ShinGoProBold'
@@ -102,5 +119,6 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: 12,
     fontFamily: 'ShinGoProExLight',
+    color:'#fff',
   }
 });
