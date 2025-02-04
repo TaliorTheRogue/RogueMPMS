@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { useStore } from './store/store';
+import Animated, { useSharedValue, withTiming, withRepeat, ReduceMotion, Keyframe, Easing } from "react-native-reanimated";
 import  MapIcon  from './components/MapIcons';
 
 export default function App() {
@@ -20,11 +21,20 @@ export default function App() {
     'SuperMario256': require('../assets/fonts/SuperMario256.ttf')
   });
   const [isReady, setIsReady] = useState(false);
+  
+  const translateY = useSharedValue(-60);
 
   useEffect(() => {
     if (fontsLoaded) {
       setIsReady(true);
     }
+    translateY.value = withRepeat(
+        withTiming(50, { duration: 800 }),
+        -1,
+        true,
+        () => {},
+        ReduceMotion.System,
+      )
   }, [fontsLoaded]);
 
   if (!isReady) return null;
@@ -45,9 +55,9 @@ export default function App() {
             name={mapData.name} 
           />
           :
-          <Image 
+          <Animated.Image 
             source={require('../assets/QuestionBlock.png')}
-            style={styles.questionLogo}
+            style={[styles.questionLogo, {transform: [{translateY}]}]}
           />
         }
       </View>
@@ -74,7 +84,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingTop: 40,
-    backgroundColor: 'red',
+    backgroundColor: '#E4000F',
   },
   titleContainer : {
     justifyContent: 'center',
