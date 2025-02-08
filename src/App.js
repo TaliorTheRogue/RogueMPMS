@@ -1,9 +1,11 @@
+// Imports from Libraries & react/react-native
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { useStore } from './store/store';
-import Animated, { useSharedValue, withTiming, withRepeat, ReduceMotion, Keyframe, Easing } from "react-native-reanimated";
+import Animated, { useSharedValue, withTiming, withRepeat, ReduceMotion, BounceOutUp } from "react-native-reanimated";
+// Imports from Custom Made Components
 import  MapIcon  from './components/MapIcons';
 
 export default function App() {
@@ -29,15 +31,17 @@ export default function App() {
       setIsReady(true);
     }
     translateY.value = withRepeat(
-        withTiming(50, { duration: 800 }),
-        -1,
-        true,
-        () => {},
-        ReduceMotion.System,
-      )
-  }, [fontsLoaded]);
+      withTiming(50, { duration: 800 }),
+      -1,
+      true,
+      () => {},
+      ReduceMotion.System,
+    )
+    
+  }, [fontsLoaded, mapData]);
 
   if (!isReady) return null;
+
 
   return (
     <View style={styles.container}>
@@ -55,10 +59,15 @@ export default function App() {
             name={mapData.name} 
           />
           :
-          <Animated.Image 
-            source={require('../assets/QuestionBlock.png')}
-            style={[styles.questionLogo, {transform: [{translateY}]}]}
-          />
+          <TouchableWithoutFeedback
+            onPress={random}
+          >
+            <Animated.Image 
+              source={require('../assets/MarioDice.png')}
+              style={[styles.diceLogo, {transform: [{translateY}]}]}
+              exiting={BounceOutUp}
+            />
+          </TouchableWithoutFeedback>
         }
       </View>
       <View>
@@ -103,7 +112,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SuperMario256',
     color: '#fff',
   },
-  questionLogo: {
+  diceLogo: {
     resizeMode: 'contain',
     width: 240,
     height: 240,
@@ -118,7 +127,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 300,
     height: 50,
+    // android shadow
     elevation: 5,
+    // ios shadow
+    shadowColor: "#000",
+    shadowOffset: {
+	  width: 0,
+	  height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   buttonText: {
     fontFamily: 'ShinGoProBold'
