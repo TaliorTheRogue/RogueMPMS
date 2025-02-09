@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { useStore } from './store/store';
 import Animated, { useSharedValue, withTiming, withRepeat, ReduceMotion, BounceOutUp } from "react-native-reanimated";
+import { Audio } from 'expo-av';
 // Imports from Custom Made Components
 import  MapIcon  from './components/MapIcons';
 
@@ -23,6 +24,7 @@ export default function App() {
     'SuperMario256': require('../assets/fonts/SuperMario256.ttf')
   });
   const [isReady, setIsReady] = useState(false);
+  const [ backgroundMusic, setBackgroundMusic ] = useState(null);  
   
   const translateY = useSharedValue(-60);
 
@@ -37,8 +39,26 @@ export default function App() {
       () => {},
       ReduceMotion.System,
     )
+
+    async function playMusic() {
+      if(backgroundMusic) return;
+      const { sound } = await Audio.Sound.createAsync(
+        require('../assets/sounds/MPJamboreeMainTheme.mp3'),
+        { shouldPlay: true, isLooping: true }
+      );
+      setBackgroundMusic(sound);
+      await sound.playAsync();
+    }
+
+    playMusic();
+
+    return () => {
+      if (backgroundMusic) {
+        backgroundMusic.unloadAsync();
+      }
+    };
     
-  }, [fontsLoaded, mapData]);
+  }, [fontsLoaded]);
 
   if (!isReady) return null;
 

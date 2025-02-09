@@ -1,6 +1,7 @@
 import { Text, Image, View, StyleSheet } from 'react-native';
 import Animated, {BounceInUp, BounceOutUp, BounceIn} from 'react-native-reanimated';
 import { useEffect, useState } from 'react';
+import { playSound } from '../utils/SoundManager';
 
 const MapIcons = ({name, icon}) => {
 
@@ -14,6 +15,10 @@ const MapIcons = ({name, icon}) => {
       setMapIcon(icon);
       setMapName(name);
       setIsVisible(true);
+
+      setTimeout(() => {
+        playSound(require('../../assets/sounds/sound-effects/letsago.mp3'))
+      }, 600);
     }, 300);
   }, [name]);
 

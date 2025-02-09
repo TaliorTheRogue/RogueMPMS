@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { data } from '../data/data';
 import * as Haptics from "expo-haptics";
+import { playSound } from '../utils/SoundManager';
+
 
 export const useStore = create((set) => ({
   selectedMap: null,
@@ -13,6 +15,7 @@ export const useStore = create((set) => ({
     } while (newId === state.selectedMap);
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    playSound(require('../../assets/sounds/sound-effects/throw.mp3'));
     
     return {
       selectedMap: newId,
