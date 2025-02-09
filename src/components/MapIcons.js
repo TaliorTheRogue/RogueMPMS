@@ -1,7 +1,7 @@
 import { Text, Image, View, StyleSheet } from 'react-native';
 import Animated, {BounceInUp, BounceOutUp, BounceIn} from 'react-native-reanimated';
 import { useEffect, useState } from 'react';
-import { playSound } from '../utils/SoundManager';
+import { playSound } from '../utils/soundManager';
 
 const MapIcons = ({name, icon}) => {
 

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { data } from '../data/data';
 import * as Haptics from "expo-haptics";
-import { playSound } from '../utils/SoundManager';
+import { playSound } from '../utils/soundManager';
 
 
 export const useStore = create((set) => ({
